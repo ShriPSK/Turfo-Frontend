@@ -1,0 +1,317 @@
+[
+    {
+        "id": "turf_001",
+        "name": "Green Field Arena",
+        "location": "Bangalore, Karnataka",
+        "pricePerHour": 1000,
+        "amenities": ["Lights", "Parking", "Washrooms"],
+        "images": ["https://example.com/images/green-field-1.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_002",
+        "name": "Goal Digger Turf",
+        "location": "Mumbai, Maharashtra",
+        "pricePerHour": 1200,
+        "amenities": ["Cafeteria", "Changing Room", "Shower"],
+        "images": ["https://example.com/images/goal-digger-1.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_003",
+        "name": "KickOff Arena",
+        "location": "Hyderabad, Telangana",
+        "pricePerHour": 900,
+        "amenities": ["Lights", "Seating Area"],
+        "images": ["https://example.com/images/kickoff-1.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_004",
+        "name": "The Turf House",
+        "location": "Chennai, Tamil Nadu",
+        "pricePerHour": 1100,
+        "amenities": ["Parking", "Washrooms", "Locker Room"],
+        "images": ["https://example.com/images/turfhouse-1.jpg"],
+        "isActive": false
+    },
+    {
+        "id": "turf_005",
+        "name": "Arena 360",
+        "location": "Delhi, NCR",
+        "pricePerHour": 1300,
+        "amenities": ["Floodlights", "Cafeteria", "Shower"],
+        "images": ["https://example.com/images/arena360-1.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_006",
+        "name": "Soccer Nest",
+        "location": "Pune, Maharashtra",
+        "pricePerHour": 950,
+        "amenities": ["Lights", "Washrooms", "Cafeteria"],
+        "images": ["https://example.com/images/soccer-nest.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_007",
+        "name": "Urban Kicks",
+        "location": "Noida, Uttar Pradesh",
+        "pricePerHour": 1050,
+        "amenities": ["Changing Room", "Parking", "Seating Area"],
+        "images": ["https://example.com/images/urban-kicks.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_008",
+        "name": "Goal Hub",
+        "location": "Jaipur, Rajasthan",
+        "pricePerHour": 980,
+        "amenities": ["Lights", "Water Dispenser"],
+        "images": ["https://example.com/images/goal-hub.jpg"],
+        "isActive": false
+    },
+    {
+        "id": "turf_009",
+        "name": "Play Turf",
+        "location": "Nagpur, Maharashtra",
+        "pricePerHour": 870,
+        "amenities": ["Locker Room", "Washrooms"],
+        "images": ["https://example.com/images/play-turf.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_010",
+        "name": "The Footy Pad",
+        "location": "Ahmedabad, Gujarat",
+        "pricePerHour": 920,
+        "amenities": ["Cafeteria", "Floodlights"],
+        "images": ["https://example.com/images/footy-pad.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_011",
+        "name": "GameOn Grounds",
+        "location": "Surat, Gujarat",
+        "pricePerHour": 990,
+        "amenities": ["Lights", "Shower"],
+        "images": ["https://example.com/images/gameon-grounds.jpg"],
+        "isActive": false
+    },
+    {
+        "id": "turf_012",
+        "name": "Turf Town",
+        "location": "Coimbatore, Tamil Nadu",
+        "pricePerHour": 880,
+        "amenities": ["Washrooms", "First Aid"],
+        "images": ["https://example.com/images/turf-town.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_013",
+        "name": "Kicks & Goals",
+        "location": "Kolkata, West Bengal",
+        "pricePerHour": 1120,
+        "amenities": ["Cafeteria", "Changing Room"],
+        "images": ["https://example.com/images/kicks-goals.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_014",
+        "name": "NetPlay Arena",
+        "location": "Bhopal, Madhya Pradesh",
+        "pricePerHour": 970,
+        "amenities": ["Parking", "Lights", "Water Dispenser"],
+        "images": ["https://example.com/images/netplay-arena.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_015",
+        "name": "PowerPlay Turf",
+        "location": "Lucknow, Uttar Pradesh",
+        "pricePerHour": 1020,
+        "amenities": ["Lights", "Seating Area"],
+        "images": ["https://example.com/images/powerplay.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_016",
+        "name": "Victory Grounds",
+        "location": "Vijayawada, Andhra Pradesh",
+        "pricePerHour": 940,
+        "amenities": ["First Aid", "Locker Room"],
+        "images": ["https://example.com/images/victory-grounds.jpg"],
+        "isActive": false
+    },
+    {
+        "id": "turf_017",
+        "name": "Mega Turf",
+        "location": "Visakhapatnam, Andhra Pradesh",
+        "pricePerHour": 1080,
+        "amenities": ["Changing Room", "Lights"],
+        "images": ["https://example.com/images/mega-turf.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_018",
+        "name": "Elite Kick Arena",
+        "location": "Patna, Bihar",
+        "pricePerHour": 850,
+        "amenities": ["Seating Area", "Washrooms"],
+        "images": ["https://example.com/images/elite-kick.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_019",
+        "name": "Swift Turf",
+        "location": "Ranchi, Jharkhand",
+        "pricePerHour": 910,
+        "amenities": ["Floodlights", "Cafeteria"],
+        "images": ["https://example.com/images/swift-turf.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_020",
+        "name": "KickX Grounds",
+        "location": "Chandigarh, Punjab",
+        "pricePerHour": 990,
+        "amenities": ["Shower", "Changing Room"],
+        "images": ["https://example.com/images/kickx.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_021",
+        "name": "Goa Kickoff",
+        "location": "Panaji, Goa",
+        "pricePerHour": 1250,
+        "amenities": ["Parking", "Washrooms", "Cafeteria"],
+        "images": ["https://example.com/images/goa-kickoff.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_022",
+        "name": "Thrill Turf",
+        "location": "Guwahati, Assam",
+        "pricePerHour": 870,
+        "amenities": ["Water Dispenser", "Floodlights"],
+        "images": ["https://example.com/images/thrill-turf.jpg"],
+        "isActive": false
+    },
+    {
+        "id": "turf_023",
+        "name": "Galaxy Arena",
+        "location": "Shimla, Himachal Pradesh",
+        "pricePerHour": 1070,
+        "amenities": ["Locker Room", "Lights", "Seating Area"],
+        "images": ["https://example.com/images/galaxy-arena.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_024",
+        "name": "Premier Grounds",
+        "location": "Dehradun, Uttarakhand",
+        "pricePerHour": 1030,
+        "amenities": ["Cafeteria", "First Aid"],
+        "images": ["https://example.com/images/premier-grounds.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_025",
+        "name": "EastEnd Turf",
+        "location": "Bhubaneswar, Odisha",
+        "pricePerHour": 950,
+        "amenities": ["Changing Room", "Parking"],
+        "images": ["https://example.com/images/eastend.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_026",
+        "name": "Strike Zone",
+        "location": "Imphal, Manipur",
+        "pricePerHour": 870,
+        "amenities": ["Floodlights", "Washrooms"],
+        "images": ["https://example.com/images/strike-zone.jpg"],
+        "isActive": false
+    },
+    {
+        "id": "turf_027",
+        "name": "Grass Masters",
+        "location": "Aizawl, Mizoram",
+        "pricePerHour": 920,
+        "amenities": ["Seating Area", "Cafeteria"],
+        "images": ["https://example.com/images/grass-masters.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_028",
+        "name": "Sunset Grounds",
+        "location": "Port Blair, Andaman & Nicobar",
+        "pricePerHour": 990,
+        "amenities": ["Shower", "Water Dispenser"],
+        "images": ["https://example.com/images/sunset-grounds.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_029",
+        "name": "Turbo Turf",
+        "location": "Daman, Daman & Diu",
+        "pricePerHour": 880,
+        "amenities": ["Lights", "Washrooms", "First Aid"],
+        "images": ["https://example.com/images/turbo-turf.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_030",
+        "name": "Zone 11 Arena",
+        "location": "Srinagar, Jammu & Kashmir",
+        "pricePerHour": 1110,
+        "amenities": ["Cafeteria", "Parking", "Floodlights"],
+        "images": ["https://example.com/images/zone11.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_031",
+        "name": "Grass & Goals",
+        "location": "Leh, Ladakh",
+        "pricePerHour": 1020,
+        "amenities": ["Locker Room", "First Aid"],
+        "images": ["https://example.com/images/grass-goals.jpg"],
+        "isActive": false
+    },
+    {
+        "id": "turf_032",
+        "name": "Blitz Arena",
+        "location": "Agartala, Tripura",
+        "pricePerHour": 940,
+        "amenities": ["Lights", "Seating Area"],
+        "images": ["https://example.com/images/blitz-arena.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_033",
+        "name": "Final Whistle",
+        "location": "Shillong, Meghalaya",
+        "pricePerHour": 1010,
+        "amenities": ["Shower", "Changing Room", "Cafeteria"],
+        "images": ["https://example.com/images/final-whistle.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_034",
+        "name": "TurfWorks",
+        "location": "Itanagar, Arunachal Pradesh",
+        "pricePerHour": 930,
+        "amenities": ["Washrooms", "Floodlights"],
+        "images": ["https://example.com/images/turfworks.jpg"],
+        "isActive": true
+    },
+    {
+        "id": "turf_035",
+        "name": "Central Park Turf",
+        "location": "Raipur, Chhattisgarh",
+        "pricePerHour": 960,
+        "amenities": ["Parking", "Seating Area"],
+        "images": ["https://example.com/images/central-park.jpg"],
+        "isActive": true
+    }
+]

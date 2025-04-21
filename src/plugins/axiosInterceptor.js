@@ -25,12 +25,12 @@
  * CONTENTS, OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT MAY DESCRIBE,    *
  * IN WHOLE OR IN PART.                                                        *
  *                                                                             *
- * File: \src\router\index.js                                                  *
+ * File: \src\plugins\axiosInterceptor.js                                      *
  * Project: turfo-admin_frontend                                               *
- * Created Date: Saturday, April 19th 2025, 1:11:45 pm                         *
+ * Created Date: Saturday, April 19th 2025, 2:08:21 pm                         *
  * Author: Shri Kaanth <shrikaanth@codestax.ai>                                *
  * -----                                                                       *
- * Last Modified: April 21st 2025, 4:58:37 pm                                  *
+ * Last Modified: April 19th 2025, 2:34:06 pm                                  *
  * Modified By: Shri Kaanth                                                    *
  * -----                                                                       *
  * Any app that can be written in JavaScript,                                  *
@@ -41,39 +41,35 @@
  * --------------------------------------------------------------------------- *
  */
 
-import { createRouter, createWebHistory } from 'vue-router'
+import axios from "axios";
 
-const routes = [
-    {
-        path: '/',
-        redirect: '/home'
-    },
-    {
-        path: '/home',
-        name: 'Home',
-        component: () => import('../views/HomeView.vue')
-    },
-    {
-        path: '/login',
-        name: 'Login',
-        component: () => import('../views/LoginView.vue')
-    },
-    {
-        path: '/',
-        component: () => import('../views/Sidebar.vue'),
-        children: [
-            {
-                path: 'turfs',
-                name: 'TurfList',
-                component: () => import('../views/TurfListView.vue')
-            }
-        ]
-    }
-]
+import Cookies from "js-cookie";
 
-const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
-    routes
-})
+const axiosInstance = axios.create({
+	baseURL: import.meta.env.VUE_APP_BACKEND_URL + '/api/v1',
+});
 
-export default router
+axiosInstance.interceptors.request.use(
+	(config) => {
+		config.headers['token'] = Cookies.get("token");
+		return config;
+	},
+	(error) => {
+		return Promise.reject(error);
+	}
+);
+
+axiosInstance.interceptors.response.use(
+	(response) => { 
+		return response;
+	},
+	(error) => {
+		if (error.response?.status === 401 || error.response?.status === 403) {
+			Cookies.remove("token")
+			window.location.replace("/login")
+		}
+		return Promise.reject(error);
+	}
+);
+
+export default axiosInstance;

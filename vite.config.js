@@ -25,12 +25,12 @@
  * CONTENTS, OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT MAY DESCRIBE,    *
  * IN WHOLE OR IN PART.                                                        *
  *                                                                             *
- * File: \src\router\index.js                                                  *
+ * File: \vite.config.js                                                       *
  * Project: turfo-admin_frontend                                               *
- * Created Date: Saturday, April 19th 2025, 1:11:45 pm                         *
+ * Created Date: Saturday, April 19th 2025, 1:13:59 pm                         *
  * Author: Shri Kaanth <shrikaanth@codestax.ai>                                *
  * -----                                                                       *
- * Last Modified: April 21st 2025, 4:58:37 pm                                  *
+ * Last Modified: April 19th 2025, 2:39:25 pm                                  *
  * Modified By: Shri Kaanth                                                    *
  * -----                                                                       *
  * Any app that can be written in JavaScript,                                  *
@@ -41,39 +41,44 @@
  * --------------------------------------------------------------------------- *
  */
 
-import { createRouter, createWebHistory } from 'vue-router'
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import vuetify from 'vite-plugin-vuetify'
 
-const routes = [
-    {
-        path: '/',
-        redirect: '/home'
-    },
-    {
-        path: '/home',
-        name: 'Home',
-        component: () => import('../views/HomeView.vue')
-    },
-    {
-        path: '/login',
-        name: 'Login',
-        component: () => import('../views/LoginView.vue')
-    },
-    {
-        path: '/',
-        component: () => import('../views/Sidebar.vue'),
-        children: [
-            {
-                path: 'turfs',
-                name: 'TurfList',
-                component: () => import('../views/TurfListView.vue')
-            }
-        ]
-    }
-]
+const path = require('path')
 
-const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
-    routes
+// https://vitejs.dev/config/
+export default defineConfig({
+    server: {
+        port: 8080
+    },
+    plugins: [
+        vue(),
+        // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
+        vuetify({
+            autoImport: true,
+        }),
+    ],
+    define: {
+        'import.meta.env': {},
+        __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'false'
+    },
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, 'src'),
+        },
+    },
+    /* remove the need to specify .vue files https://vitejs.dev/config/#resolve-extensions
+    resolve: {
+      extensions: [
+        '.js',
+        '.json',
+        '.jsx',
+        '.mjs',
+        '.ts',
+        '.tsx',
+        '.vue',
+      ]
+    },
+    */
 })
-
-export default router
