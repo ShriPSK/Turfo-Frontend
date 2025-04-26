@@ -1,176 +1,143 @@
 <template>
-    <div class="login-wrapper">
-        <!-- <div class="left-wrapper">
-            <img :src="require('@/assets/images/login_image.png')" class="login-img"/>
-        </div> -->
-        <div class="right-wrapper">
-            <div class="header-section">
-                <img :src="Logo" alt="logo" />
-                <p class="get-started">Get Started</p>
-                <!-- <p class="description">Please enter your details to continue.</p> -->
-            </div>
-            <div class="body-section">
-                <button style="width: 100%;display:flex;justify-content: center;">
-                    <div ref="googleLoginBtn"></div>
-                </button>
-            </div>
-
-            <div v-if="loginLoader" class="login-loader">
-                <v-progress-circular :width="3" :size="30" indeterminate></v-progress-circular>
-            </div>
+    <div class="login-container">
+        <div class="sub-text">
+            <span class="title">Sign In to TURFO</span>
+            <span class="gray">Enter your email to receive a verification code</span>
         </div>
-
-        <v-dialog v-model="unauthorisedErrorPopup" persistent width="400">
-            <v-card>
-                <v-card-title class="text-h5">
-                    Ooops ! You are unauthorized !!
-                </v-card-title>
-                <v-card-text>You are unauthorized! Please login with authorized account</v-card-text>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="unauthorisedErrorPopup = false">
-                        Okay
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
+        <v-form v-model="isEmailFormValid" @submit.prevent="sendOtp" class="form-container"
+            v-if="!isContinueBtnClicked">
+            <div class="gray">Email Address</div>
+            <v-text-field v-model="email" :rules="emailRules" hide-details variant="outlined" density="comfortable"
+                placeholder="your.email@example.com" prepend-inner-icon="mdi-email-outline"
+                class="email-input"></v-text-field>
+            <button class="btn outlined" :disabled="!isEmailFormValid || sendBtnLoader">
+                <div v-if="sendBtnLoader" class="btn-text">
+                    <v-progress-circular v-if="sendBtnLoader" indeterminate size="16" width="3"></v-progress-circular>
+                    <span>Sending...</span>
+                </div>
+                <div v-else class="btn-text">
+                    <span>Continue with Email</span>
+                    <v-icon color="black" size="small">mdi-arrow-right</v-icon>
+                </div>
+            </button>
+            <button class="back-home-btn" @click="goHome">
+                <v-icon size="small">mdi-arrow-left</v-icon>
+                <span>Back to Home</span>
+            </button>
+        </v-form>
+        <v-form @submit.prevent="verifyOtp" class="form-container" v-if="isContinueBtnClicked">
+            <div class="gray">Verification Code</div>
+            <v-otp-input v-model="otp" :length="6" class="otp-input"></v-otp-input>
+            <button class="btn outlined" :disabled="!otp || otp.length < 6 || verifyBtnLoader">
+                <div class="btn-text" v-if="verifyBtnLoader">
+                    <v-progress-circular v-if="verifyBtnLoader" indeterminate size="16" width="3"></v-progress-circular>
+                    <span>Verifying...</span>
+                </div>
+                <div v-else class="btn-text">
+                    <span>Verify Code</span>
+                    <v-icon color="black" size="small">mdi-arrow-right</v-icon>
+                </div>
+            </button>
+        </v-form>
     </div>
 </template>
 
 <script>
-import Cookies from 'js-cookie';
-import CryptoJS from 'crypto-js';
-import axios from 'axios';
-import Logo from '@/assets/icons/logo.svg';
-
 export default {
-    name: 'LoginView',
     data() {
         return {
-            Logo,
-            clientId: import.meta.env.VITE_APP_CLIENT_ID,
-            encryptionKey: import.meta.env.VITE_APP_ENCRYPTION_KEY,
-            loginLoader: false,
-            unauthorisedErrorPopup: false
+            email: null,
+            emailRules: [
+                v => !!v || 'Email is required',
+                v => /.+@.+\..+/.test(v) || 'Email must be valid',
+            ],
+            isEmailFormValid: false,
+            isContinueBtnClicked: false,
+            isOtpFormValid: false,
+            otp: null,
+            sendBtnLoader: false,
+            verifyBtnLoader: false,
         }
     },
-
-    async mounted() {
-        this.renderSignInButton()
-    },
-
     methods: {
-        async onGoogleAuthSuccess(jwtCredentials) {
-            this.loginLoader = true;
-            const profileData = JSON.parse(atob(jwtCredentials.credential.split('.')[1]
-            ));
-
-            var idToken = jwtCredentials.credential;
-            const encryptedText = CryptoJS.AES.encrypt(idToken + " " + profileData.email, this.encryptionKey).toString()
-            var createAdminTokenData = {
-                key: encryptedText
-            }
-            this.$router.push({
-                name: 'TurfList'
-            })
-            // await axios.post(this.url + "/admin/token", createAdminTokenData)
-            //     .then(async (apiResponse) => {
-            //         Cookies.set("access-token", apiResponse.data.token);
-            //         this.$router.push({
-            //             name: "upcomingBookings",
-            //         });
-            //     })
-            //     .catch(err => {
-            //         if (err.response?.status === 401) {
-            //             return this.unauthorisedErrorPopup = true;
-            //         }
-            //         console.error("[LOGIN FAILED]", err.message);
-            //     })
-            //     .finally(() => {
-            //         this.loginLoader = false;
-            //     })
+        sendOtp() {
+            this.sendBtnLoader = true;
+            setTimeout(() => {
+                this.sendBtnLoader = false;
+                this.isContinueBtnClicked = true;
+            }, 1000)
         },
-
-        renderSignInButton() {
-            window.google.accounts.id.initialize({
-                client_id: this.clientId,
-                callback: this.onGoogleAuthSuccess,
-                prompt: 'select_by',
-                scope: "email"
-            })
-            window.google.accounts.id.renderButton(
-                this.$refs.googleLoginBtn, {
-                text: 'signin',
-                shape: 'square',
-                size: 'large',
-                width: 500,
-                theme: 'white',
-            }
-            )
-
-            window.google.accounts.id.prompt();
+        verifyOtp() {
+            this.verifyBtnLoader = true;
+            setTimeout(() => {
+                this.verifyBtnLoader = false;
+            }, 1000)
         },
-    },
-};
-
+        goHome() {
+            this.$router.push({ name: 'HomeView' })
+        }
+    }
+}
 </script>
 
 <style scoped>
-.login-wrapper {
-    display: flex;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-}
-
-.left-wrapper {
-    height: 100%;
-    background-size: 100% 100%;
-    flex: 2;
-}
-
-.login-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.right-wrapper {
+.login-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 24px;
-    height: 100%;
-    flex: 3;
+    height: 90vh;
+    gap: 48px;
 }
 
-.header-section {
+.title {
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.sub-text {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
 }
 
-.get-started {
-    color: var(--Main-Color-black-500, #212332);
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 150%;
-}
-
-.description {
-    color: var(--Grey-Light-light-grey-400, #6F717E);
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 174%;
-}
-
-.login-loader {
+.form-container {
     display: flex;
+    flex-direction: column;
+    gap: 32px;
     width: 100%;
-    justify-content: center;
+    max-width: 400px;
+    background: #1a1a1a;
+    padding: 24px;
+    border-radius: 16px;
+}
+
+.back-home-btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 16px;
+    padding: 8px 16px;
+    border-radius: 12px;
+    width: fit-content;
+}
+
+.back-home-btn:hover {
+    background-color: #313131;
+}
+
+.email-input {
+    height: auto;
+}
+
+.email-input :deep(.v-field--focused .v-field__overlay) {
+    border: 1px solid var(--primary-color) !important;
+}
+
+.btn-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 </style>

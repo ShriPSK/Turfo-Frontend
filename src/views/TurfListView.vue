@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import turfListJson from '@/assets/json/turfList.json'
+import turfListJson from '../assets/json/turfList.json'
 export default {
     data() {
         return {

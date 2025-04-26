@@ -30,7 +30,7 @@
  * Created Date: Saturday, April 19th 2025, 1:11:45 pm                         *
  * Author: Shri Kaanth <shrikaanth@codestax.ai>                                *
  * -----                                                                       *
- * Last Modified: April 21st 2025, 4:58:37 pm                                  *
+ * Last Modified: April 24th 2025, 7:38:52 pm                                  *
  * Modified By: Shri Kaanth                                                    *
  * -----                                                                       *
  * Any app that can be written in JavaScript,                                  *
@@ -46,29 +46,37 @@ import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
     {
         path: '/',
-        redirect: '/home'
-    },
-    {
-        path: '/home',
-        name: 'Home',
-        component: () => import('../views/HomeView.vue')
-    },
-    {
-        path: '/login',
-        name: 'Login',
-        component: () => import('../views/LoginView.vue')
-    },
-    {
-        path: '/',
-        component: () => import('../views/Sidebar.vue'),
+        redirect: '/home',
+        component: () => import('../components/HeaderFooter.vue'),
         children: [
             {
-                path: 'turfs',
-                name: 'TurfList',
-                component: () => import('../views/TurfListView.vue')
+                path: 'home',
+                name: 'HomeView',
+                component: () => import('../views/HomeView.vue')
+            },
+            {
+                path: 'booking',
+                name: 'BookingView',
+                component: () => import('../views/BookingView.vue')
+            },
+            {
+                path: 'login',
+                name: 'LoginView',
+                component: () => import('../views/LoginView.vue')
             }
         ]
-    }
+    },
+    // {
+    //     path: '/',
+    //     component: () => import('../views/Sidebar.vue'),
+    //     children: [
+    //         {
+    //             path: 'turfs',
+    //             name: 'TurfList',
+    //             component: () => import('../views/TurfListView.vue')
+    //         }
+    //     ]
+    // }
 ]
 
 const router = createRouter({

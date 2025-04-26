@@ -30,8 +30,8 @@
  * Created Date: Saturday, April 19th 2025, 1:11:45 pm                         *
  * Author: Shri Kaanth <shrikaanth@codestax.ai>                                *
  * -----                                                                       *
- * Last Modified:                                                              *
- * Modified By:                                                                *
+ * Last Modified: April 22nd 2025, 2:43:49 pm                                  *
+ * Modified By: Shri Kaanth                                                    *
  * -----                                                                       *
  * Any app that can be written in JavaScript,                                  *
  *     will eventually be written in JavaScript !!                             *
@@ -44,17 +44,13 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store'
 import vuetify from './plugins/vuetify'
-import { loadFonts } from './plugins/webfontloader'
 import InlineSvg from 'vue-inline-svg'
 
-loadFonts()
 const app = createApp(App)
 app.component('Svg', InlineSvg)
 
 app
   .use(router)
-  .use(store)
   .use(vuetify)
   .mount('#app')

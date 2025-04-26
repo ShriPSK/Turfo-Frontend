@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import Logo from '@/assets/icons/logo.svg'
-import TurfIcon from '@/assets/icons/turf.svg'
+import Logo from '../assets/icons/logo.svg'
+import TurfIcon from '../assets/icons/turf.svg'
 export default {
     props: ['adminLevel'],
     data() {
@@ -79,7 +79,7 @@ export default {
     padding: 12px 16px;
     cursor: pointer;
     white-space: nowrap;
-    transition: background 0.7s ease;
+    transition: background-color 0.7s ease;
 }
 
 .nav.router-link-exact-active {

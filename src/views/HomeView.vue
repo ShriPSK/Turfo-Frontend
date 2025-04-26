@@ -1,25 +1,5 @@
 <template>
-    <v-navigation-drawer location="right" v-model="showNavOverlay" @close="toggleNavOverlay" bg-color="black" temporary>
-        <div class="drawer-container">check</div>
-    </v-navigation-drawer>
-
-    <div class="page-container">
-        <div class="nav-header">
-            <div class="logo">
-                <span class="white">TURF</span>
-                <span class="green">O</span>
-            </div>
-            <div class="nav-right web">
-                <a href="#home" class="nav-item">Home</a>
-                <a href="#turfDetails" class="nav-item">Turf Details</a>
-                <a href="#booking" class="nav-item">Booking</a>
-                <a href="#testimonials" class="nav-item">Testimonials</a>
-                <a href="#contact" class="nav-item">Contact</a>
-                <a href="#login" class="nav-item">Login</a>
-            </div>
-            <button class="mobile nav-toggle-icon" @click="toggleNavOverlay"><v-icon>{{ showNavOverlay ? 'mdi-close' :
-                'mdi-menu' }}</v-icon></button>
-        </div>
+    <div class="home-container">
         <div class="overlay"></div>
         <section class="hero-section-wrapper" id="home">
             <div class="hero-section">
@@ -28,8 +8,8 @@
                 <div class="hero-header-sub gray">Book your next game on our professional-grade turf. State-of-the-art
                     facilities designed for the perfect sporting experience.</div>
                 <div class="hero-btn-container">
-                    <button class="btn outlined">Book Now</button>
-                    <button class="btn contained"><a href="#turfDetails">Explore Turf</a></button>
+                    <button class="btn outlined" @click="goToBooking">Book Now</button>
+                    <!-- <button class="btn contained"><a href="#turfDetails">Explore Turf</a></button> -->
                 </div>
             </div>
         </section>
@@ -59,10 +39,8 @@
                     </div>
 
                     <div class="glide__arrows" data-glide-el="controls">
-                        <button class="glide__arrow glide__arrow--left" data-glide-dir="<"><Svg :src="ChevronLeft"
-                                stroke="white"></Svg></button>
-                        <button class="glide__arrow glide__arrow--right" data-glide-dir=">"><Svg :src="ChevronRight"
-                                stroke="white"></Svg></button>
+                        <button class="glide__arrow glide__arrow--left" data-glide-dir="<"><v-icon color="white">mdi-chevron-left</v-icon></button>
+                        <button class="glide__arrow glide__arrow--right" data-glide-dir=">"><v-icon color="white">mdi-chevron-right</v-icon></button>
                     </div>
                     <div class="glide__bullets" data-glide-el="controls[nav]">
                         <button class="glide__bullet" data-glide-dir="=0"></button>
@@ -131,7 +109,7 @@
                         </div>
                     </div>
                     <div class="check-btn-container">
-                        <button class="btn outlined">
+                        <button class="btn outlined" @click="goToBooking">
                             <span>Check Availability</span>
                             <v-icon>mdi-calendar-blank</v-icon>
                         </button>
@@ -144,25 +122,37 @@
 
 <script>
 import Glide from '@glidejs/glide'
-import ChevronRight from '@/assets/icons/chevron_right.svg'
-import ChevronLeft from '@/assets/icons/chevron_left.svg'
 
-import clock from '@/assets/icons/clock.svg'
-import bookings from '@/assets/icons/bookings.svg'
-import capacity from '@/assets/icons/capacity.svg'
-import facilities from '@/assets/icons/facilities.svg'
-import field_size from '@/assets/icons/field_size.svg'
-import maintenance from '@/assets/icons/maintenance.svg'
-import quality from '@/assets/icons/quality.svg'
-import sports from '@/assets/icons/sports.svg'
-import turf from '@/assets/icons/turf.svg'
+import clock from '../assets/icons/clock.svg'
+import bookings from '../assets/icons/bookings.svg'
+import capacity from '../assets/icons/capacity.svg'
+import facilities from '../assets/icons/facilities.svg'
+import field_size from '../assets/icons/field_size.svg'
+import maintenance from '../assets/icons/maintenance.svg'
+import quality from '../assets/icons/quality.svg'
+import sports from '../assets/icons/sports.svg'
+import turf from '../assets/icons/turf.svg'
 
 export default {
     data() {
         return {
-            ChevronLeft, ChevronRight, clock, bookings, capacity, facilities, field_size, maintenance, quality, sports, turf,
-            showNavOverlay: false,
+            clock, bookings, capacity, facilities, field_size, maintenance, quality, sports, turf,
         }
+    },
+    watch: {
+        $route(to, from) {
+            if (to.hash) {
+                const element = document.querySelector(to.hash)
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' })
+                }
+            }
+        },
+    },
+    methods: {
+        goToBooking() {
+            this.$router.push({ name: 'BookingView' })
+        },
     },
     mounted() {
         const glide = new Glide('.glide', {
@@ -172,53 +162,11 @@ export default {
             gap: 10,
         }).mount()
     },
-    methods: {
-        toggleNavOverlay() {
-            this.showNavOverlay = !this.showNavOverlay;
-        },
-    },
 }
 
 </script>
 
 <style scoped>
-.page-container {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    width: 100%;
-    color: white;
-    background: #121212;
-}
-
-.nav-header {
-    position: fixed;
-    top: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 24px;
-    width: 100%;
-    z-index: 10000;
-}
-
-.logo {
-    font-family: 'Hysteria', sans-serif;
-    font-weight: 600;
-    font-size: 24px;
-}
-
-.nav-right {
-    display: flex;
-    gap: 20px;
-}
-
-.nav-item {
-    color: white;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-}
 
 .hero-section-wrapper {
     display: flex;
@@ -227,16 +175,19 @@ export default {
     justify-content: center;
     text-align: center;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.3);
+    /* background-color: rgba(0, 0, 0, 0.3); */
+    /* background: url('../assets/images/hero_section_bg.jpg') ; */
 }
 
 .overlay {
     position: absolute;
     top: 0;
+    left: 0;
+    width: 100%;
     height: 100vh;
-    background: url('../assets/images/hero_section_bg.jpg') no-repeat center center;
+    z-index: -1;
+    background: url('../assets/images/hero_section_bg.jpg');
 }
-
 .hero-section {
     display: flex;
     flex-direction: column;
@@ -276,54 +227,9 @@ export default {
     padding: 20px 0;
 }
 
-.btn {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 20px;
-    cursor: pointer;
-    border-radius: 10px;
-    font-weight: 600;
-
-    @media (max-width: 900px) {
-        padding: 8px 24px;
-    }
-}
-
 .btn a {
     text-decoration: none;
     color: inherit;
-}
-
-.btn.outlined {
-    background: var(--primary-color);
-    color: black;
-    animation: pulse 3s ease-in-out infinite;
-}
-
-.btn.contained {
-    color: var(--primary-color);
-    border: 2px solid var(--primary-color);
-    transition: background 0.5s ease, color 0.3s ease;
-}
-
-.btn.contained:hover {
-    background: var(--primary-color);
-    color: black;
-}
-
-@keyframes pulse {
-    0% {
-        opacity: 1;
-    }
-
-    70% {
-        opacity: 0.7;
-    }
-
-    100% {
-        opacity: 1;
-    }
 }
 
 .premium-turf-container {

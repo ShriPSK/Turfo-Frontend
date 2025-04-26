@@ -30,7 +30,7 @@
  * Created Date: Saturday, April 19th 2025, 1:13:59 pm                         *
  * Author: Shri Kaanth <shrikaanth@codestax.ai>                                *
  * -----                                                                       *
- * Last Modified: April 19th 2025, 2:39:25 pm                                  *
+ * Last Modified: April 23rd 2025, 1:56:54 pm                                  *
  * Modified By: Shri Kaanth                                                    *
  * -----                                                                       *
  * Any app that can be written in JavaScript,                                  *
@@ -43,42 +43,13 @@
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import vuetify from 'vite-plugin-vuetify'
+import Components from 'unplugin-vue-components/vite'
 
-const path = require('path')
-
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
-    server: {
-        port: 8080
-    },
     plugins: [
-        vue(),
-        // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
-        vuetify({
-            autoImport: true,
-        }),
-    ],
-    define: {
-        'import.meta.env': {},
-        __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'false'
-    },
-    resolve: {
-        alias: {
-            '@': path.resolve(__dirname, 'src'),
-        },
-    },
-    /* remove the need to specify .vue files https://vitejs.dev/config/#resolve-extensions
-    resolve: {
-      extensions: [
-        '.js',
-        '.json',
-        '.jsx',
-        '.mjs',
-        '.ts',
-        '.tsx',
-        '.vue',
-      ]
-    },
-    */
+        Components(), vue()],
+    server: {
+        port: 3000
+    }
 })
