@@ -7,17 +7,17 @@
         <v-form v-model="isEmailFormValid" @submit.prevent="sendOtp" class="form-container"
             v-if="!isContinueBtnClicked">
             <div class="gray">Email Address</div>
-            <v-text-field v-model="email" :rules="emailRules" hide-details variant="outlined" density="comfortable"
+            <v-text-field v-model="email" :rules="emailRules" hide-details variant="contained" density="comfortable"
                 placeholder="your.email@example.com" prepend-inner-icon="mdi-email-outline"
                 class="email-input"></v-text-field>
-            <button class="btn outlined" :disabled="!isEmailFormValid || sendBtnLoader">
+            <button class="btn contained" :disabled="!isEmailFormValid || sendBtnLoader">
                 <div v-if="sendBtnLoader" class="btn-text">
                     <v-progress-circular v-if="sendBtnLoader" indeterminate size="16" width="3"></v-progress-circular>
                     <span>Sending...</span>
                 </div>
                 <div v-else class="btn-text">
                     <span>Continue with Email</span>
-                    <v-icon color="black" size="small">mdi-arrow-right</v-icon>
+                    <v-icon color="white" size="small">mdi-arrow-right</v-icon>
                 </div>
             </button>
             <button class="back-home-btn" @click="goHome">
@@ -28,7 +28,7 @@
         <v-form @submit.prevent="verifyOtp" class="form-container" v-if="isContinueBtnClicked">
             <div class="gray">Verification Code</div>
             <v-otp-input v-model="otp" :length="6" class="otp-input"></v-otp-input>
-            <button class="btn outlined" :disabled="!otp || otp.length < 6 || verifyBtnLoader">
+            <button class="btn contained" :disabled="!otp || otp.length < 6 || verifyBtnLoader">
                 <div class="btn-text" v-if="verifyBtnLoader">
                     <v-progress-circular v-if="verifyBtnLoader" indeterminate size="16" width="3"></v-progress-circular>
                     <span>Verifying...</span>

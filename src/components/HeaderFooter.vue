@@ -1,25 +1,38 @@
 <template>
 
-    <v-navigation-drawer location="right" v-model="showNavOverlay" @close="toggleNavOverlay" bg-color="black" temporary>
-        <div class="drawer-container">check</div>
+    <v-navigation-drawer location="right" v-model="showNavOverlay" @close="toggleNavOverlay" bg-color="black"
+        class="nav-drawer">
+        <button class="close-icon" @click="toggleNavOverlay">
+            <v-icon>mdi-close-circle-outline</v-icon>
+        </button>
+        <div class="drawer-container">
+            <div class="drawer-header">
+                <Logo />
+            </div>
+            <div class="drawer-details">
+                <a href="/" class="nav-item">Explore Turf</a>
+                <a href="#contact" class="nav-item">Contact</a>
+            </div>
+        </div>
     </v-navigation-drawer>
 
     <div class="page-container">
         <div class="nav-header" :class="{ 'nav-fixed': $route.name === 'HomeView' }">
             <Logo />
             <div class="nav-right web">
-                <a href="/#home" class="nav-item">Home</a>
-                <a href="/#turfDetails" class="nav-item">Turf Details</a>
-                <a href="/booking" class="nav-item">Booking</a>
-                <a href="#testimonials" class="nav-item">Testimonials</a>
+                <a href="/" class="nav-item">Explore Turf</a>
                 <a href="#contact" class="nav-item">Contact</a>
-                <a href="/login" class="nav-item">Login</a>
+                <a href="/login" class="btn contained">Login</a>
             </div>
-            <button class="mobile nav-toggle-icon" @click="toggleNavOverlay">
-                <v-icon>{{ showNavOverlay ? 'mdi-close' : 'mdi-menu' }}</v-icon></button>
+            <div class="nav-right mobile">
+                <button class="nav-toggle-icon" @click="toggleNavOverlay">
+                    <v-icon>{{ showNavOverlay ? 'mdi-close' : 'mdi-menu' }}</v-icon>
+                </button>
+                <div class="btn contained" v-if="!showNavOverlay"><a href="/login">Login</a></div>
+            </div>
         </div>
         <router-view />
-        <div class="page-footer">
+        <section class="page-footer" id="contact">
             <div class="footer-top">
                 <div class="footer-details">
                     <Logo />
@@ -35,10 +48,6 @@
                 <div class="footer-details">
                     <div class="title">Contact Us</div>
                     <div class="contact-item">
-                        <Svg :src="Location" stroke="var(--primary-color)" class="location-icon"></Svg>
-                        <span>123 Sports Avenue, Stadium District, City</span>
-                    </div>
-                    <div class="contact-item">
                         <Svg :src="Call" stroke="var(--primary-color)" class="call-icon"></Svg>
                         <a href="tel:1234567890" class="nav-item" target="_blank">+91 123 456 7890</a>
                     </div>
@@ -53,7 +62,7 @@
                 <div class="copyright">© 2025 TURFO. All Rights Reserved.</div>
                 <div class="copyright">Designed and maintained by <span class="green">TURFO Team</span></div>
             </div>
-        </div>
+        </section>
     </div>
 </template>
 
@@ -104,7 +113,6 @@ export default {
 .nav-fixed {
     position: fixed;
     top: 0;
-    z-index: 10000;
 }
 
 .nav-right {
@@ -113,6 +121,8 @@ export default {
 }
 
 .nav-item {
+    display: flex;
+    align-items: center;
     color: white;
     text-decoration: none;
     font-size: 16px;
@@ -124,6 +134,10 @@ export default {
     flex-direction: column;
     padding: 24px;
     background: #1A1A1A;
+
+    @media (max-width: 768px) {
+        gap: 16px;
+    }
 }
 
 .footer-top {
@@ -166,15 +180,37 @@ export default {
     justify-content: center;
 }
 
-@media (max-width: 900px) {
+.drawer-container, .drawer-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    height: 100%;
+    padding: 30px;
+}
+
+.close-icon {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+}
+
+@media (max-width: 768px) {
     .web {
         display: none;
     }
 }
 
-@media (min-width: 900px) {
+@media (min-width: 768px) {
     .mobile {
         display: none;
     }
+}
+</style>
+
+<style>
+.v-navigation-drawer--active {
+    width: 100vw !important;
 }
 </style>

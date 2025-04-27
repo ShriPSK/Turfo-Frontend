@@ -23,8 +23,8 @@
                         </v-menu>
                         <span class="title">Select Date</span>
                     </div>
-                    <div class="dates-container" :key="refresh">
-                        <div v-for="(date, index) in dates" :key="index" class="date-item"
+                    <div class="dateList-container" :key="refresh">
+                        <div v-for="(date, index) in dateList" :key="index" class="date-item"
                             :class="{ 'active': selectedDate.dateValue === date.dateValue }"
                             @click="selectedDate = date">
                             <div class="day">{{ date.day }}</div>
@@ -34,25 +34,15 @@
                     </div>
                 </div>
                 <div class="select-time-container">
-                    <div class="title">Select Start Time</div>
+                    <div class="title">Select One or More Time Slots</div>
                     <div class="time-duration-container">
-                        <button v-for="(time, index) in timeList" :key="index" class="time-grid"
-                            @click="resetAndAddSlots(time)" :class="{
+                        <button v-for="(time, index) in timeList" :key="index" class="time-grid" @click="addSlots(time)"
+                            :class="{
                                 'active': selectedSlots.includes(time),
-                                'blocked': blockedTimes.includes(time.value)
-                            }" :disabled="blockedTimes.includes(time.value)">
+                                'blocked': blockedTimes.includes(time.slotStartTime)
+                            }" :disabled="blockedTimes.includes(time.slotStartTime)">
                             {{ time.title }}
                         </button>
-                    </div>
-                </div>
-                <div class="input duration" v-if="selectedSlots.length > 0">
-                    <div class="title">Duration</div>
-                    <div class="duration-value">
-                        <button class="duration-btn" :disabled="duration === 1"
-                            @click="updateDuration(-1)"><v-icon>mdi-minus</v-icon></button>
-                        <button class="value">{{ duration === 1 ? ' 1 hour' : duration + ' hours' }}</button>
-                        <button class="duration-btn" :disabled="disableDuration"
-                            @click="updateDuration(1)"><v-icon>mdi-plus</v-icon></button>
                     </div>
                 </div>
                 <div class="booking-summary-container" v-if="selectedDate && selectedSlots.length > 0">
@@ -63,11 +53,7 @@
                     </div>
                     <div class="summary-item">
                         <div class="summary-label">Slot: </div>
-                        <div class="summary-value">{{ durationPeriod }}</div>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-label">Duration: </div>
-                        <div class="summary-value">{{ duration === 1 ? '1 hour' : duration + ' hours' }}</div>
+                        <div class="summary-value">{{ slotDuration }}</div>
                     </div>
                     <div class="summary-item">
                         <div class="summary-label">Price: </div>
@@ -75,10 +61,9 @@
                     </div>
                 </div>
                 <div class="continue-btn-container">
-                    <button class="btn outlined" :disabled="!selectedDate || !selectedSlots.length > 0"
+                    <button class="btn contained" :disabled="!selectedDate || selectedSlots.length === 0"
                         @click="goToNextStep">Continue
-                        to Player
-                        Details</button>
+                        to Player Details</button>
                 </div>
             </div>
             <div class="player-details-container" v-if="currentStep === 2">
@@ -104,11 +89,7 @@
                     </div>
                     <div class="summary-item">
                         <div class="summary-label">Slot: </div>
-                        <div class="summary-value">{{ durationPeriod }}</div>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-label">Duration: </div>
-                        <div class="summary-value">{{ duration === 1 ? '1 hour' : duration + ' hours' }}</div>
+                        <div class="summary-value">{{ slotDuration }}</div>
                     </div>
                     <div class="summary-item">
                         <div class="summary-label">Price: </div>
@@ -120,16 +101,19 @@
                         <div class="white bold">{{ '₹ ' + finalAmount }}</div>
                     </div>
                     <div class="price-item">
+                        <div class="summary-label">Platform Fee:</div>
+                        <div class="platform-fee gray">
+                            <span class="strike-out">₹ 20</span>
+                            <span class="green">FREE</span>
+                        </div>
+                    </div>
+                    <div class="price-item">
                         <div class="summary-label">Total:</div>
                         <div class="green bold">{{ '₹ ' + finalAmount }}</div>
                     </div>
-                    <div class="price-item">
-                        <div class="summary-label">Amount per player:</div>
-                        <div class="gray">{{ '₹ ' + (finalAmount / playerCount).toFixed(2) }}</div>
-                    </div>
                 </div>
                 <div class="continue-payment-btn-container">
-                    <button class="btn outlined" @click="goToNextStep">Continue to Payment</button>
+                    <button class="btn contained" @click="goToNextStep">Continue to Payment</button>
                 </div>
             </div>
             <div class="payment-details-container" v-if="currentStep === 3">
@@ -154,18 +138,18 @@
                         </template>
                     </v-radio>
                 </v-radio-group>
-    
+
                 <div class="payment-details-container" v-if="paymentOption === 'card'">
                     <div class="input-field">
                         <span class="gray">Card Number</span>
-                        <v-text-field v-model="cardDetails.cardNumber" placeholder="1234 5678 9012 3456" variant="outlined"
-                            density="comfortable" bg-color="#0D0D0D"></v-text-field>
+                        <v-text-field v-model="cardDetails.cardNumber" placeholder="1234 5678 9012 3456"
+                            variant="contained" density="comfortable" bg-color="#0D0D0D"></v-text-field>
                     </div>
                     <div class="input-row">
                         <div class="input-field">
                             <span class="gray">Expiry Date</span>
-                            <v-text-field v-model="cardExpiry" placeholder="MM/YY" variant="outlined" density="comfortable"
-                                bg-color="#0D0D0D" @input="updateCardExpiry()"></v-text-field>
+                            <v-text-field v-model="cardExpiry" placeholder="MM/YY" variant="contained"
+                                density="comfortable" bg-color="#0D0D0D" @input="updateCardExpiry()"></v-text-field>
                         </div>
                     </div>
                 </div>
@@ -190,11 +174,10 @@ export default {
             pageTitle: null,
             currentStep: 1,
             totalSteps: 3,
-            dates: [],
+            dateList: [],
             selectedDate: {},
             selectedSlots: [],
-            duration: 1,
-            durationPeriod: null,
+            slotDuration: null,
             baseAmount: 200,
             finalAmount: null,
             timeList: [],
@@ -210,14 +193,8 @@ export default {
                 expiryDate: null,
                 cvv: null,
                 cardName: null
-            }
-        }
-    },
-    computed: {
-        disableDuration() {
-            if (this.selectedSlots.length > 0) {
-                return this.blockedTimes.includes(this.selectedSlots[this.selectedSlots.length - 1].value + 1) || this.selectedSlots[this.selectedSlots.length - 1].value + 1 > 23;
-            }
+            },
+            firstSelectedSlot: null,
         }
     },
     watch: {
@@ -228,12 +205,6 @@ export default {
                 this.refresh += 1;
             }
         },
-        selectedSlots() {
-            if (this.selectedSlots.length > 0) {
-                this.finalAmount = this.baseAmount * this.duration;
-                this.durationPeriod = `${moment(this.selectedSlots[0].value, 'HH').format('h:mm A')} - ${moment(this.selectedSlots[this.selectedSlots.length - 1].value + 1, 'HH').format('h:mm A')}`;
-            }
-        },
 
         'cardDetails.cardNumber'() {
             let realNumber = this.cardDetails.cardNumber.replace(/-/gi, '')
@@ -242,13 +213,16 @@ export default {
         },
     },
     methods: {
+        hourToString(hour) {
+            return moment(hour, 'HH').format('h:mm A');
+        },
         updatePageTitle() {
             if (this.currentStep === 1) {
                 this.pageTitle = 'Select Date & Time';
             } else if (this.currentStep === 2) {
-                this.pageTitle = 'Player Details';
-            } else {
                 this.pageTitle = 'Booking Summary';
+            } else {
+                this.pageTitle = 'Payment';
             }
         },
         goBack() {
@@ -260,34 +234,6 @@ export default {
             }
         },
 
-        getFutureDates() {
-            for (let i = 0; i < 13; i++) {
-                const day = moment().add(i, 'days');
-                this.dates.push({
-                    date: day.date(),
-                    day: day.format('ddd'),
-                    month: day.format('MMM'),
-                    dateValue: day.format('dddd, MMMM D, YYYY')
-                });
-
-            }
-            console.log("dates: ", this.dates);
-
-        },
-        updateDuration(value) {
-            this.duration += value;
-            if (value === 1) {
-                let lastValue = this.selectedSlots[this.selectedSlots.length - 1].value;
-                let nextSlot = this.timeList.find(t => t.value === lastValue + 1);
-                if (nextSlot) this.selectedSlots.push(nextSlot);
-            } else {
-                this.selectedSlots.pop();
-            }
-            this.finalAmount = this.baseAmount * this.duration;
-            this.durationPeriod = `${moment(this.selectedSlots[0].value, 'HH').format('h:mm A')} - ${moment(this.selectedSlots[this.selectedSlots.length - 1].value + 1, 'HH').format('h:mm A')}`;
-            console.log("selectedSlots", this.selectedSlots);
-
-        },
         updatePlayerCount(value) {
             this.playerCount += value;
         },
@@ -298,6 +244,7 @@ export default {
                 month: moment(date).format('MMM'),
                 dateValue: moment(date).format('dddd, MMMM D, YYYY')
             };
+            if(!this.dateList.includes(this.selectedDate)) this.dateList[0] = this.selectedDate;
 
             this.refresh += 1;
             this.dateMenu = false;
@@ -325,26 +272,52 @@ export default {
             if (this.currentStep === 3) {
                 this.paymentOption = 'card';
             }
+            this.updatePageTitle();
             window.scrollTo(0, 0);
         },
-        resetAndAddSlots(time) {
-            this.selectedSlots = [];
-            this.selectedSlots.push(time);
-            this.duration = 1;
+        addSlots(time) {
+            if (this.selectedSlots.length === 0 || this.selectedSlots.length > 1) {
+                this.selectedSlots = [time];
+                this.finalAmount = this.baseAmount;
+                this.slotDuration = this.hourToString(time.slotStartTime) + ' - ' + this.hourToString(time.slotEndTime);
+            } else {
+                let slotStartTime = Math.min(this.selectedSlots[0].slotStartTime, time.slotStartTime);
+                let slotEndTime = Math.max(this.selectedSlots[this.selectedSlots.length - 1].slotEndTime, time.slotEndTime);
+                this.selectedSlots = this.timeList.filter(time => time.slotStartTime >= slotStartTime && time.slotEndTime <= slotEndTime && !this.blockedTimes.includes(time.slotStartTime));
+                this.finalAmount = this.baseAmount * this.selectedSlots.length;
+                this.slotDuration = this.hourToString(slotStartTime) + ' - ' + this.hourToString(slotEndTime);
+            }
+
         }
     },
     mounted() {
         this.updatePageTitle();
-        this.getFutureDates();
-        this.selectedDate = this.dates[0];
 
+        // Get next 13 days
+        for (let i = 0; i < 13; i++) {
+            let day = moment().add(i, 'days');
+            this.dateList.push({
+                date: day.date(),
+                day: day.format('ddd'),
+                month: day.format('MMM'),
+                dateValue: day.format('dddd, MMMM D, YYYY')
+            });
+        }
+        this.selectedDate = this.dateList[0];
+
+        // Generate time slots
         for (let i = 5; i <= 23; i++) {
-            const hour = i > 12 ? i - 12 : i;
-            const ampm = i >= 12 ? 'PM' : 'AM';
+            let startHour = i > 12 ? i - 12 : i;
+            let startAmpm = i >= 12 ? 'PM' : 'AM';
+
+            let nextHour = (i + 1) > 23 ? 0 : (i + 1); // 23 + 1 = 0 (Midnight)
+            let endHour = nextHour === 0 ? 12 : (nextHour > 12 ? nextHour - 12 : nextHour);
+            let endAmpm = nextHour >= 12 ? 'PM' : 'AM';
+
             this.timeList.push({
-                title: `${hour}:00 ${ampm}`,
-                // title: `${hour}:00 ${ampm} - ${hour + 1}:00 ${ampm}`,
-                value: i
+                title: `${startHour}:00 ${startAmpm} - ${endHour}:00 ${endAmpm}`,
+                slotStartTime: i,
+                slotEndTime: nextHour
             });
         }
 
@@ -393,21 +366,21 @@ export default {
     flex-direction: column;
     align-items: center;
     gap: 30px;
+    overflow: hidden;
 }
 
-.select-date-container {
+.select-date-container,
+.select-time-container {
     display: flex;
     flex-direction: column;
     gap: 16px;
-
-    @media (max-width: 1200px) {
-        width: 100%;
-    }
+    width: 100%;
 }
 
-.dates-container {
+.dateList-container {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
     width: 100%;
 
@@ -454,40 +427,11 @@ export default {
     justify-content: center;
 }
 
-.select-time-container {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-
-    @media (max-width: 900px) {
-        width: 100%;
-    }
-}
-
-.time-duration-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-}
-
 .input {
     display: flex;
     align-items: center;
     gap: 32px;
     width: 100%
-}
-
-.input.duration {
-    display: flex;
-    justify-content: space-between;
-}
-
-.duration-value {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 50px;
 }
 
 .value {
@@ -501,25 +445,6 @@ export default {
 .label,
 .value {
     flex: 1;
-}
-
-.start-time-dropdown {
-    width: 50%;
-}
-
-.duration-btn {
-    background: var(--primary-color);
-    border-radius: 50%;
-}
-
-.duration-btn:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-}
-
-.time-grid.active {
-    background-color: var(--primary-color);
-    color: black;
 }
 
 .booking-summary-container {
@@ -541,6 +466,15 @@ export default {
     color: #b3b3b3;
 }
 
+.platform-fee {
+    display: flex;
+    gap: 12px;
+}
+
+.strike-out {
+    text-decoration: line-through;
+}
+
 .booking-body .title,
 .player-details-container .title {
     font-size: 24px;
@@ -553,6 +487,14 @@ export default {
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
     width: 100%;
+
+    @media ((max-width: 900px) and (min-width: 600px)) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 600px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 .time-grid {
@@ -563,6 +505,10 @@ export default {
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.3s ease;
+
+    @media (max-width: 900px) {
+        padding: 16px 20px;
+    }
 }
 
 .time-grid:hover,
@@ -576,7 +522,6 @@ export default {
 
 .time-grid.active {
     background-color: var(--primary-color);
-    color: black;
 }
 
 .continue-btn-container {

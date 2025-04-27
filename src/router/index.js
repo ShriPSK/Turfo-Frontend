@@ -66,17 +66,6 @@ const routes = [
             }
         ]
     },
-    // {
-    //     path: '/',
-    //     component: () => import('../views/Sidebar.vue'),
-    //     children: [
-    //         {
-    //             path: 'turfs',
-    //             name: 'TurfList',
-    //             component: () => import('../views/TurfListView.vue')
-    //         }
-    //     ]
-    // }
 ]
 
 const router = createRouter({

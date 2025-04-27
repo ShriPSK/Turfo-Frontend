@@ -97,19 +97,19 @@ button:disabled {
     }
 }
 
-.btn.outlined {
+.btn.contained {
     background: var(--primary-color);
-    color: black;
+    color: white;
     animation: pulse 3s ease-in-out infinite;
 }
 
-.btn.contained {
+.btn.outlined {
     color: var(--primary-color);
     border: 2px solid var(--primary-color);
     transition: background-color 0.5s ease, color 0.3s ease;
 }
 
-.btn.contained:hover {
+.btn.outlined:hover {
     background: var(--primary-color);
     color: black;
 }

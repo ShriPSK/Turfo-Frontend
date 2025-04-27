@@ -8,7 +8,7 @@
                 <div class="hero-header-sub gray">Book your next game on our professional-grade turf. State-of-the-art
                     facilities designed for the perfect sporting experience.</div>
                 <div class="hero-btn-container">
-                    <button class="btn outlined" @click="goToBooking">Book Now</button>
+                    <button class="btn contained" @click="goToBooking">Book Now</button>
                     <!-- <button class="btn contained"><a href="#turfDetails">Explore Turf</a></button> -->
                 </div>
             </div>
@@ -51,65 +51,24 @@
                 </div>
                 <div class="facility-right">
                     <div class="facilities-container">
-                        <div class="facility">
-                            <Svg :src="clock" stroke="var(--primary-color)"></Svg>
+                        <div class="facility web" v-for="(facility, index) in facilities" :key="index">
+                            <Svg :src="facility.icon" stroke="var(--primary-color)"></Svg>
                             <div class="facility-details">
-                                <div class="facility-title">Operating Hours</div>
-                                <div class="facility-subtitle gray">Open daily from 6 AM to 11 PM</div>
+                                <div class="facility-title">{{ facility.title }}</div>
+                                <div class="facility-subtitle gray">{{ facility.subtitle }}</div>
                             </div>
                         </div>
-                        <div class="facility">
-                            <Svg :src="capacity" stroke="var(--primary-color)"></Svg>
-                            <div class="facility-details">
-                                <div class="facility-title">Capacity</div>
-                                <div class="facility-subtitle gray">Up to 14 players (7v7 format)</div>
+
+                        <div class="facility mobile" v-for="(facility, index) in facilities" :key="index">
+                            <div class="facility-row">
+                                <Svg :src="facility.icon" stroke="var(--primary-color)"></Svg>
+                                <div class="facility-title">{{ facility.title }}</div>
                             </div>
-                        </div>
-                        <div class="facility">
-                            <Svg :src="field_size" stroke="var(--primary-color)"></Svg>
-                            <div class="facility-details">
-                                <div class="facility-title">Field Size</div>
-                                <div class="facility-subtitle gray">60m x 40m FIFA approved dimensions</div>
-                            </div>
-                        </div>
-                        <div class="facility">
-                            <Svg :src="sports" stroke="var(--primary-color)"></Svg>
-                            <div class="facility-details">
-                                <div class="facility-title">Sports</div>
-                                <div class="facility-subtitle gray">Football, Rugby, Cricket</div>
-                            </div>
-                        </div>
-                        <div class="facility">
-                            <Svg :src="quality" stroke="var(--primary-color)"></Svg>
-                            <div class="facility-details">
-                                <div class="facility-title">Quality</div>
-                                <div class="facility-subtitle gray">Professional-grade turf surface</div>
-                            </div>
-                        </div>
-                        <div class="facility">
-                            <Svg :src="facilities" stroke="var(--primary-color)"></Svg>
-                            <div class="facility-details">
-                                <div class="facility-title">Facilities</div>
-                                <div class="facility-subtitle gray">Changing rooms, Lighting, Parking</div>
-                            </div>
-                        </div>
-                        <div class="facility">
-                            <Svg :src="maintenance" stroke="var(--primary-color)"></Svg>
-                            <div class="facility-details">
-                                <div class="facility-title">Maintenance</div>
-                                <div class="facility-subtitle gray">Daily cleaning and weekly deep maintenance</div>
-                            </div>
-                        </div>
-                        <div class="facility">
-                            <Svg :src="bookings" stroke="var(--primary-color)"></Svg>
-                            <div class="facility-details">
-                                <div class="facility-title">Bookings</div>
-                                <div class="facility-subtitle gray">1-hour slots, 24h advance booking</div>
-                            </div>
+                            <div class="facility-subtitle gray">{{ facility.subtitle }}</div>
                         </div>
                     </div>
                     <div class="check-btn-container">
-                        <button class="btn outlined" @click="goToBooking">
+                        <button class="btn contained" @click="goToBooking">
                             <span>Check Availability</span>
                             <v-icon>mdi-calendar-blank</v-icon>
                         </button>
@@ -137,6 +96,7 @@ export default {
     data() {
         return {
             clock, bookings, capacity, facilities, field_size, maintenance, quality, sports, turf,
+            facilities: []
         }
     },
     watch: {
@@ -161,6 +121,49 @@ export default {
             focusAt: 'center',
             gap: 10,
         }).mount()
+
+        this.facilities = [
+            {
+                title: "Operating Hours",
+                subtitle: "Open daily from 6 AM to 11 PM",
+                icon: clock
+            },
+            {
+                title: "Capacity",
+                subtitle: "Up to 14 players (7v7 format)",
+                icon: capacity
+            },
+            {
+                title: "Field Size",
+                subtitle: "60m x 40m FIFA approved dimensions",
+                icon: field_size
+            },
+            {
+                title: "Sports",
+                subtitle: "Football, Rugby, Cricket",
+                icon: sports
+            },
+            {
+                title: "Quality",
+                subtitle: "Professional-grade turf surface",
+                icon: quality
+            },
+            {
+                title: "Facilities",
+                subtitle: "Changing rooms, Lighting, Parking",
+                icon: facilities
+            },
+            {
+                title: "Turf Type",
+                subtitle: "Grass Turf",
+                icon: maintenance
+            },
+            {
+                title: "Bookings",
+                subtitle: "1-hour slots, 24h advance booking",
+                icon: bookings
+            }
+        ]
     },
 }
 
@@ -317,6 +320,16 @@ export default {
     padding: 16px;
     background: #1A1A1A;
     border-radius: 20px;
+
+    @media (max-width: 900px) {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+.facility-row {
+    display: flex;
+    gap: 16px;
 }
 
 .facility-details {
@@ -331,10 +344,6 @@ export default {
 
 .facility-subtitle {
     text-align: left;
-}
-
-.nav-toggle-icon {
-    z-index: 10000;
 }
 
 .drawer-container {
