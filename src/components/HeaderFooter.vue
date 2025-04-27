@@ -1,6 +1,6 @@
 <template>
 
-    <v-navigation-drawer location="right" v-model="showNavOverlay" @close="toggleNavOverlay" bg-color="black"
+    <v-navigation-drawer location="right" v-model="showNavOverlay" @close="toggleNavOverlay" mobile bg-color="black"
         class="nav-drawer">
         <button class="close-icon" @click="toggleNavOverlay">
             <v-icon>mdi-close-circle-outline</v-icon>

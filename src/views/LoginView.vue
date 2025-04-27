@@ -7,9 +7,13 @@
         <v-form v-model="isEmailFormValid" @submit.prevent="sendOtp" class="form-container"
             v-if="!isContinueBtnClicked">
             <div class="gray">Email Address</div>
-            <v-text-field v-model="email" :rules="emailRules" hide-details variant="contained" density="comfortable"
-                placeholder="your.email@example.com" prepend-inner-icon="mdi-email-outline"
-                class="email-input"></v-text-field>
+            <div class="email-checkbox-container">
+                <v-text-field v-model="email" :rules="emailRules" hide-details variant="outlined" density="comfortable"
+                    placeholder="your.email@example.com" prepend-inner-icon="mdi-email-outline"
+                    class="email-input"></v-text-field>
+                <v-checkbox v-model="isTurfOwnerLogin" hide-details color="var(--primary-color)"
+                    label="Login as Turf Owner" class="checkbox"></v-checkbox>
+            </div>
             <button class="btn contained" :disabled="!isEmailFormValid || sendBtnLoader">
                 <div v-if="sendBtnLoader" class="btn-text">
                     <v-progress-circular v-if="sendBtnLoader" indeterminate size="16" width="3"></v-progress-circular>
@@ -57,6 +61,7 @@ export default {
             otp: null,
             sendBtnLoader: false,
             verifyBtnLoader: false,
+            isTurfOwnerLogin: false
         }
     },
     methods: {

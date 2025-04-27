@@ -45,7 +45,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="booking-summary-container" v-if="selectedDate && selectedSlots.length > 0">
+                <div class="step1-summary" v-if="selectedDate && selectedSlots.length > 0">
                     <div class="title">Booking Summary</div>
                     <div class="summary-item">
                         <div class="summary-label">Date: </div>
@@ -60,7 +60,7 @@
                         <div class="summary-value">{{ '₹ ' + finalAmount }}</div>
                     </div>
                 </div>
-                <div class="continue-btn-container">
+                <div class="booking-footer">
                     <button class="btn contained" :disabled="!selectedDate || selectedSlots.length === 0"
                         @click="goToNextStep">Continue
                         to Player Details</button>
@@ -81,7 +81,7 @@
                             @click="updatePlayerCount(1)"><v-icon>mdi-chevron-right</v-icon></button>
                     </div>
                 </div>
-                <div class="player-booking-summary-container" v-if="selectedDate && selectedSlots.length > 0">
+                <div class="step2-summary">
                     <div class="title">Booking Summary</div>
                     <div class="summary-item">
                         <div class="summary-label">Date: </div>
@@ -112,7 +112,7 @@
                         <div class="green bold">{{ '₹ ' + finalAmount }}</div>
                     </div>
                 </div>
-                <div class="continue-payment-btn-container">
+                <div class="booking-footer">
                     <button class="btn contained" @click="goToNextStep">Continue to Payment</button>
                 </div>
             </div>
@@ -139,19 +139,72 @@
                     </v-radio>
                 </v-radio-group>
 
-                <div class="payment-details-container" v-if="paymentOption === 'card'">
+                <div class="payment-container" v-if="paymentOption === 'card'">
                     <div class="input-field">
                         <span class="gray">Card Number</span>
                         <v-text-field v-model="cardDetails.cardNumber" placeholder="1234 5678 9012 3456"
-                            variant="contained" density="comfortable" bg-color="#0D0D0D"></v-text-field>
+                            variant="outlined" density="comfortable" bg-color="#0D0D0D" @input="updateCardNumber()"></v-text-field>
                     </div>
                     <div class="input-row">
                         <div class="input-field">
                             <span class="gray">Expiry Date</span>
-                            <v-text-field v-model="cardExpiry" placeholder="MM/YY" variant="contained"
+                            <v-text-field v-model="cardDetails.expiryDate" placeholder="MM/YY" variant="outlined"
                                 density="comfortable" bg-color="#0D0D0D" @input="updateCardExpiry()"></v-text-field>
                         </div>
+                        <div class="input-field">
+                            <span class="gray">CVV</span>
+                            <v-text-field v-model="cardDetails.cvv" placeholder="123" variant="outlined"
+                                density="comfortable" bg-color="#0D0D0D" @input="updateCardCvv()"></v-text-field>
+                        </div>
                     </div>
+                    <div class="input-field">
+                        <span class="gray">Card Holder Name</span>
+                        <v-text-field v-model="cardDetails.cardHolderName" placeholder="John Doe" variant="outlined"
+                            density="comfortable" bg-color="#0D0D0D"></v-text-field>
+                    </div>
+                </div>
+
+                <div class="payment-field-container" v-if="paymentOption === 'upi'">
+                    <div class="input-field">
+                        <span class="gray">UPI ID</span>
+                        <v-text-field v-model="upiId" placeholder="example@upi" variant="outlined"
+                            density="comfortable" bg-color="#0D0D0D"></v-text-field>
+                    </div>
+                </div>
+                
+                <div class="step3-summary">
+                    <div class="title">Final Summary</div>
+                    <div class="summary-item">
+                        <div class="summary-label">Date: </div>
+                        <div class="summary-value">{{ selectedDate.dateValue }}</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Slot: </div>
+                        <div class="summary-value">{{ slotDuration }}</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Price: </div>
+                        <div class="summary-value">{{ '₹ ' + finalAmount }}</div>
+                    </div>
+                    <v-divider></v-divider>
+                    <div class="price-item">
+                        <div class="summary-label">Turf Charge:</div>
+                        <div class="white bold">{{ '₹ ' + finalAmount }}</div>
+                    </div>
+                    <div class="price-item">
+                        <div class="summary-label">Platform Fee:</div>
+                        <div class="platform-fee gray">
+                            <span class="strike-out">₹ 20</span>
+                            <span class="green">FREE</span>
+                        </div>
+                    </div>
+                    <div class="price-item">
+                        <div class="summary-label">Total:</div>
+                        <div class="green bold">{{ '₹ ' + finalAmount }}</div>
+                    </div>
+                </div>
+                <div class="booking-footer">
+                    <button class="btn contained" :disabled="disablePayBtn">Click to Pay</button>
                 </div>
             </div>
         </div>
@@ -187,15 +240,24 @@ export default {
             refresh: 0,
             playerCount: 1,
             paymentOption: 'card',
-            cardExpiry: null,
             cardDetails: {
                 cardNumber: null,
                 expiryDate: null,
                 cvv: null,
-                cardName: null
+                cardHolderName: null
             },
+            upiId: null,
             firstSelectedSlot: null,
         }
+    },
+    computed: {
+        disablePayBtn() {
+            if (this.paymentOption === 'card') {
+                return Object.values(this.cardDetails).some(value => value === null || value === '');
+            } else {
+                return this.upiId === null || this.upiId === '';
+            }
+        }  
     },
     watch: {
         selectedDate() {
@@ -204,12 +266,6 @@ export default {
                 this.datePickerValue = new Date(this.selectedDate.dateValue);
                 this.refresh += 1;
             }
-        },
-
-        'cardDetails.cardNumber'() {
-            let realNumber = this.cardDetails.cardNumber.replace(/-/gi, '')
-            let dashedNumber = realNumber.match(/.{1,4}/g)
-            this.cardDetails.cardNumber = dashedNumber.join('-')
         },
     },
     methods: {
@@ -244,28 +300,41 @@ export default {
                 month: moment(date).format('MMM'),
                 dateValue: moment(date).format('dddd, MMMM D, YYYY')
             };
-            if(!this.dateList.includes(this.selectedDate)) this.dateList[0] = this.selectedDate;
+            if (!this.dateList.includes(this.selectedDate)) this.dateList[0] = this.selectedDate;
 
             this.refresh += 1;
             this.dateMenu = false;
         },
-        updateCardExpiry() {
-            let expiryDate = this.cardExpiry.replace(/[^0-9]/g, '');
-            if (expiryDate && (expiryDate.length > 4)) {
-                this.cardDetails.expiryDate = expiryDate.slice(0, 4);
-                this.cardExpiry = expiryDate.slice(0, 4);
+        updateCardNumber() {
+            if(!this.cardDetails.cardNumber) return;
+            if(this.cardDetails.cardNumber.length > 19) {
+                this.cardDetails.cardNumber = this.cardDetails.cardNumber.slice(0, 19);
                 return;
             }
-
-            if (expiryDate && expiryDate[0] > 1) {
-                expiryDate = `0${expiryDate}`
+            let cardNumber = this.cardDetails.cardNumber.replace(/\D/g, ''); 
+            let realNumber = cardNumber.replace(/-/gi, '')
+            let dashedNumber = realNumber.match(/.{1,4}/g)
+            this.cardDetails.cardNumber = dashedNumber.join('-')
+        },
+        updateCardExpiry() {
+            if (!this.cardDetails.expiryDate) return;
+            let expiry = this.cardDetails.expiryDate.replace(/\D/g, '');
+            if (expiry[0] > '1') {
+                expiry = '0' + expiry;
             }
-            let realNumber = expiryDate.replace(/-/gi, '')
-            let dashedNumber = realNumber.match(/.{1,2}/g)
-
-            this.cardDetails.expiryDate = dashedNumber.join('/')
-            this.cardExpiry = dashedNumber.join('/');
-
+            if (expiry.length >= 2) {
+                expiry = expiry.slice(0, 2) + '/' + expiry.slice(2, 4);
+            }
+            expiry = expiry.slice(0, 5);
+            this.cardDetails.expiryDate = expiry;
+        },
+        updateCardCvv() {
+            if (!this.cardDetails.cvv) return;
+            let cvv = this.cardDetails.cvv.replace(/\D/g, '');
+            if (cvv.length > 3) {
+                cvv = cvv.slice(0, 3);
+            }
+            this.cardDetails.cvv = cvv;
         },
         goToNextStep() {
             this.currentStep += 1;
@@ -282,7 +351,7 @@ export default {
                 this.slotDuration = this.hourToString(time.slotStartTime) + ' - ' + this.hourToString(time.slotEndTime);
             } else {
                 let slotStartTime = Math.min(this.selectedSlots[0].slotStartTime, time.slotStartTime);
-                let slotEndTime = Math.max(this.selectedSlots[this.selectedSlots.length - 1].slotEndTime, time.slotEndTime);
+                let slotEndTime = Math.max(this.selectedSlots[0].slotEndTime, time.slotEndTime);
                 this.selectedSlots = this.timeList.filter(time => time.slotStartTime >= slotStartTime && time.slotEndTime <= slotEndTime && !this.blockedTimes.includes(time.slotStartTime));
                 this.finalAmount = this.baseAmount * this.selectedSlots.length;
                 this.slotDuration = this.hourToString(slotStartTime) + ' - ' + this.hourToString(slotEndTime);
@@ -310,8 +379,8 @@ export default {
             let startHour = i > 12 ? i - 12 : i;
             let startAmpm = i >= 12 ? 'PM' : 'AM';
 
-            let nextHour = (i + 1) > 23 ? 0 : (i + 1); // 23 + 1 = 0 (Midnight)
-            let endHour = nextHour === 0 ? 12 : (nextHour > 12 ? nextHour - 12 : nextHour);
+            let nextHour = i + 1;
+            let endHour = nextHour === 24 ? 12 : (nextHour > 12 ? nextHour - 12 : nextHour);
             let endAmpm = nextHour >= 12 ? 'PM' : 'AM';
 
             this.timeList.push({
@@ -447,7 +516,7 @@ export default {
     flex: 1;
 }
 
-.booking-summary-container {
+.step1-summary {
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -524,7 +593,7 @@ export default {
     background-color: var(--primary-color);
 }
 
-.continue-btn-container {
+.booking-footer {
     display: flex;
     justify-content: flex-end;
     width: 100%;
@@ -581,7 +650,7 @@ export default {
     border-bottom-right-radius: 12px;
 }
 
-.player-booking-summary-container {
+.step2-summary, .step3-summary {
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -598,11 +667,6 @@ export default {
 .price-item {
     display: flex;
     justify-content: space-between;
-}
-
-.continue-payment-btn-container {
-    display: flex;
-    justify-content: flex-end;
 }
 
 .radio-group :deep(.v-selection-control-group) {
@@ -627,5 +691,14 @@ export default {
 
 .radio-item.active:hover {
     border-color: var(--primary-color);
+}
+
+.input-row {
+    display: flex;
+    gap: 16px;
+}
+
+.input-field {
+    flex: 1;
 }
 </style>
